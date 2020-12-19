@@ -1,30 +1,24 @@
 <?php
 
 
-class ControleVisiteur
+class ControleVisiteur extends Controle
 {
     private array $tableauErreur = array();
 
-    function __construct()
+    function __construct(?string $action)
     {
         global $chemin, $lesVues;
 
         try {
-            $action = $_REQUEST['action'];
-            if ($action != NULL) {
-                $action = Validation::val_action($action);
-            }
-
             switch ($action) {
 
                 case NULL:
-                    $this->accueil(); //appeler page d'accueil
+                    $this->accueil(); //appeler page d'accueil via la classe mère
                     break;
 
                 case "VOIR_LISTE" : //visualiser une liste avec ses tâches
                     $this->voirListe($_REQUEST['idliste']);
                     break;
-
 
                 case "ADD_LISTE_PUB": //ajouter une liste publique
                     $this->ajouterListePub();
@@ -39,7 +33,7 @@ class ControleVisiteur
                     break;
 
                 case "ADD_TACHE": //ajouter une tâche
-                    $this->ajouterTache($_POST['intitule'], $_REQUEST['idliste']);
+                    $this->ajouterTache($_REQUEST['idliste']);
                     break;
 
                 case "SUP_TACHE": //supprimer une tâche
@@ -47,8 +41,20 @@ class ControleVisiteur
                     break;
 
                 case "FORM_CO": //accéder au formulaire de connexion
+                    $this->affichageConnexion();
+                    break;
 
                 case "CONNEXION": //valider le formulaire de connexion
+                    $this->connexion();
+                    break;
+
+                case "FORM_INS":
+                    $this->affichageInscription();
+                    break;
+
+                case "INSCRIPTION":
+                    $this->inscription();
+                    break;
 
                 default:
                     $this->tableauErreur[] = "Mauvais appel php";
@@ -67,24 +73,13 @@ class ControleVisiteur
         exit(0);
     }
 
-    function accueil()
-    {
-        global $chemin, $lesVues;
-
-        $m = new ModeleListe();
-        $tabPub = $m->getListesPubliques();
-
-        require($chemin . $lesVues['accueil']);
-    }
-
     function voirListe(int $id)
     {
         global $chemin, $lesVues;
 
-        $mL = new ModeleListe();
-        $mT = new ModeleTache();
-        $titre = $mL->getTitre($id);
-        $tabTaches = $mT->getTache($id);
+        $m = new ModeleDonnees();
+        $titre = $m->getTitre($id);
+        $tabTaches = $m->getTache($id);
 
         require($chemin . $lesVues['uneListe']);
     }
@@ -102,7 +97,7 @@ class ControleVisiteur
         if (!empty($this->tableauErreur)) {
             require($chemin . $lesVues['erreur']);
         } else {
-            $m = new ModeleListe();
+            $m = new ModeleDonnees();
             $m->addPublique($titre);
 
             $this->accueil();
@@ -119,13 +114,13 @@ class ControleVisiteur
             require($chemin . $lesVues['erreur']);
         }
 
-        $m = new ModeleListe();
+        $m = new ModeleDonnees();
         $m->deleteListe($id);
 
         $this->accueil();
     }
 
-    function ajouterTache(string $intitule, int $id)
+    function ajouterTache(int $id)
     {
         global $chemin, $lesVues;
 
@@ -137,7 +132,7 @@ class ControleVisiteur
         if (!empty($this->tableauErreur)) {
             require($chemin . $lesVues['erreur']);
         } else {
-            $m = new ModeleTache();
+            $m = new ModeleDonnees();
             $m->addTache($intitule,$id);
 
             $this->voirListe($id);
@@ -156,7 +151,7 @@ class ControleVisiteur
         }
         else
         {
-            $m = new ModeleTache();
+            $m = new ModeleDonnees();
             $t = $m->getById($idT);
 
             if ($t->isEffectuee())
@@ -184,10 +179,78 @@ class ControleVisiteur
         }
         else
         {
-            $m = new ModeleTache();
+            $m = new ModeleDonnees();
             $m->deleteTache($idT);
 
             $this->voirListe($idL);
+        }
+    }
+
+    function affichageConnexion()
+    {
+        global $chemin, $lesVues;
+
+        require($chemin . $lesVues['connexion']);
+    }
+
+    function connexion()
+    {
+        global $chemin, $lesVues;
+
+        $login=$_POST['login'];
+        $mdp=$_POST['mdp'];
+
+        $login=Validation::val_login($login,$this->tableauErreur);
+        $mdp=Validation::val_mdp($mdp,$this->tableauErreur);
+
+        if (!empty($this->tableauErreur) || !isset($login) || !isset($mdp)) {
+            require($chemin . $lesVues['erreur']);
+        }
+        else {
+            $m=new ModeleUtilisateur();
+            $user=$m->connexion($login, $mdp);
+
+            if (isset($user)) {
+                $this->accueil();
+            }
+            else {
+                $this->tableauErreur[]='Erreur de connexion';
+                require($chemin . $lesVues['erreur']);
+                require($chemin . $lesVues['connexion']);
+            }
+        }
+    }
+
+    function affichageInscription()
+    {
+        global $chemin, $lesVues;
+
+        require($chemin . $lesVues['inscription']);
+    }
+
+    function inscription()
+    {
+        global $chemin, $lesVues;
+
+        $login=$_POST['login'];
+        $mdp=$_POST['mdp'];
+
+        $login=Validation::val_login($login,$this->tableauErreur);
+        $mdp=Validation::val_mdp($mdp,$this->tableauErreur);
+
+        if (!empty($this->tableauErreur) || !isset($login) || !isset($mdp)) {
+            require($chemin . $lesVues['erreur']);
+        }
+        else {
+            $m=new ModeleUtilisateur();
+            if($m->inscription($login, $mdp)) {
+                $this->accueil();
+            }
+            else {
+                $this->tableauErreur[]="Erreur : login déjà utilisé";
+                require($chemin . $lesVues['erreur']);
+                require($chemin . $lesVues['inscription']);
+            }
         }
     }
 }

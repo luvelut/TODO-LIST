@@ -49,6 +49,31 @@ class Validation
 
     }*/
 
+    //Validation du login
+    static function val_login(string $login, array &$tableauErreur) {
+        if ($login != filter_var($login, FILTER_SANITIZE_STRING))
+        {
+            $tableauErreur[] =	"Login invalide (attaque sécurité)";
+            return "";
+        }
+
+        else {
+            return filter_var($login, FILTER_SANITIZE_STRING);
+        }
+    }
+
+    //Validation du login
+    static function val_mdp(string $mdp, array &$tableauErreur) {
+        if ($mdp != filter_var($mdp, FILTER_SANITIZE_STRING))
+        {
+            $tableauErreur[] =	"Mot de passe invalide (attaque sécurité)";
+            return "";
+        }
+        else {
+            return filter_var($mdp, FILTER_SANITIZE_STRING);
+        }
+    }
+
     //Validation de l'intitulé de la tâche
     static function val_tache(string &$intitule, array &$tableauErreur) {
         $intitule=trim($intitule," ");

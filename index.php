@@ -8,7 +8,9 @@ require_once(__DIR__.'/config/configuration.php');
 require_once(__DIR__.'/config/Autoload.php');
 Autoload::charger();
 
-$controlVisiteur = new ControleVisiteur();
+session_start();
+
+$frontCtrl = new FrontController();
 
 
 ?>

@@ -28,11 +28,11 @@ class GatewayListe
         return $tabPub;
     }
 
-    public function selectListesPrivees(Utilisateur $u): array
+    public function selectListesPrivees(int $id): array
     {
         $tabPriv = array();
         $query='SELECT * FROM liste WHERE privee="OUI" AND idauteur=:idauteur ORDER BY (idliste)';
-        $this->co->executeQuery($query,array(':idauteur' => array($u->getId(),PDO::PARAM_INT)));
+        $this->co->executeQuery($query,array(':idauteur' => array($id,PDO::PARAM_INT)));
         $resultats=$this->co->getResultats();
         foreach($resultats as $row)
         {
@@ -60,13 +60,13 @@ class GatewayListe
             ':idauteur' => array('NULL',PDO::PARAM_NULL)));
     }
 
-    public function ajouterListePrivee(string $titre, Utilisateur $u) : void
+    public function ajouterListePrivee(string $titre, int $id) : void
     {
         $query="INSERT INTO liste VALUES(:id,:titre,:priv,:idauteur)";
         $this->co->executeQuery($query,array(':id' => array('NULL', PDO::PARAM_NULL),
             ':titre' => array($titre,PDO::PARAM_STR),
             ':priv' => array('OUI',PDO::PARAM_STR),
-            ':idauteur' => array($u->getId(),PDO::PARAM_INT)));
+            ':idauteur' => array($id,PDO::PARAM_INT)));
     }
 
     public function supprimerListe(int $id) : void

@@ -13,21 +13,37 @@
 <!-- MENU NAV -->
 	<body>
 		<nav class="navbar navbar-light bg-light">
-		  <a class="navbar-brand" href="#">
+		  <a class="navbar-brand" href="vues/acceuil.html">
 		    <img src="vues/photos/menu.png" id="menu" width="30" height="30" class="d-inline-block align-top" alt="" loading="lazy">
 		    To Do List
 		  </a>
-		  
-		  <button type="button" onclick="location.href='vues/pageConnexion.html'" class="btn btn-dark">Connexion</button>
+            <?php
+            if (isset($_SESSION['login'])) {
+                echo '<button type="button" onclick="location.href=' . "'" . 'index.php?action=DECONNEXION' . "'". '"
+                     class="btn btn-dark">Déconnexion</button>';
+            }
+            else {
+                echo '<button type="button" onclick="location.href=' . "'" . 'index.php?action=FORM_CO' . "'". '"
+                     class="btn btn-dark">Connexion</button>';
+            }
+            ?>
 		</nav>
 		<br>
 
 
-<!-- SWITCH LISTE PRIVEES -->
+<!-- SWITCH LISTE PRIVEES
+<img src="vues/photos/lock.jpg" id="imgprivee" width="40" height="40">
+-->
 
 	<div id="privee">
 		<a id=priv href="#">
-			<img src="vues/photos/lock.jpg" id="imgprivee" width="40" height="40">
+            <?php
+                if (isset($_SESSION['login'])) {
+                    echo '<button onclick="location.href=' . "'" . 'index.php?action=ALL_PRIV' . "'". '">
+                    Voir les listes privées
+                    </button>';
+                }
+            ?>
 		</a>
 	</div>
 
@@ -41,8 +57,7 @@
 				foreach ($tabPub as $t) {
 					$id=$t->getId();
 					$titre=$t->titre;
-					$url='index.php?action=VOIR_LISTE&idliste='.$id;
-					$url = "'" . $url . "'";
+					$url= "'" . 'index.php?action=VOIR_LISTE&idliste=' . $id . "'";
 					echo '<button type="button" onclick="location.href=' . $url . '"' .
 						' class="list-group-item list-group-item-action">'
 						. $titre .'</button>' ;

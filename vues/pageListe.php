@@ -4,6 +4,7 @@
 	    <meta charset="utf-8">
 	    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 	    <link rel="stylesheet" href="vues/css/bootstrap.css">
 	    <link rel="stylesheet" href="vues/css/style.css">
 
@@ -16,16 +17,41 @@
 
 		<br>
 		<br>
+
+
 		<div id="modif">
+			<div class="w3-container">
+
+
+				<button onclick="document.getElementById('id01').style.display='inline-block'" id="ajoutTache" class="btn btn-dark" class="w3-button w3-black">Ajouter une tâche</button>
+
+				<div id="id01" class="w3-modal">
+					<div class="w3-modal-content">
+
+						<div class="w3-container">
+							<form method="post" name="formAjoutTache" id="formAjoutTache">
+								<div class="input-group input-group-lg">
+									<div class="input-group-prepend">
+										<span class="input-group-text" id="inputGroup-sizing-lg">Intitulé de la tache à ajouter</span>
+									</div>
+									<input type="text" name="intitule" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg">
+									<input type="hidden" name="action" value="ADD_TACHE">
+								</div>
+								<br>
+								<input id="valider" type="submit" class="btn btn-dark" value="Valider"/>
+								<input id="retourTache" type="button" class="btn btn-dark" value="Annuler" onclick="document.getElementById('id01').style.display='none'"/>
+								<br>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+
 			<?php
 			$urlSupListe="'" . 'index.php?action=SUP_LISTE&idliste='.$id . "'";
-			echo '<button type="button" onclick="location.href=' . $urlSupListe .
-			'" class="btn btn-dark">Ajouter une tâche</button>' ;
+
 			echo '<button type="button" onclick="location.href=' . $urlSupListe .
 			'" class="btn btn-dark">Supprimer la liste</button>' ; ?>
-			<!--<button type="button" class="btn btn-dark">Supprimer une tâche</button>
-			<button type="button" class="btn btn-dark">Ajouter une tâche</button>
-			<button type="button" class="btn btn-dark" onclick="location.href=''">Supprimer la liste</button>-->
 
 
 		</div>
@@ -49,15 +75,16 @@
 									 onchange="location.href=' . $urlChange . '" >';
 					}
 					echo '
-						<label for="check">' . $intit . '</label>
-						<button onclick="location.href=' . $urlSup . '"
-						>Sup</button><br>';
+						<label id="intit" for="check">' . $intit . '</label>
+						<button id="bDelete" onclick="location.href=' . $urlSup . '"
+						><img src="vues/photos/delete.png" id="imgdelete" width="23" height="23"></button><br>';
 				}
 			}
 			else {
 				echo '<p>Aucune tâche à afficher</p>';
 			} ?>
 		</div>
+
 		<br>
 		<br>
 		<p id="retourAccueil">

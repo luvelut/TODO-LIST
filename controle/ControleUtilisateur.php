@@ -1,50 +1,28 @@
 <?php
 
 
-class ControleUtilisateur extends ControleVisiteur
+class ControleUtilisateur extends Controle
 {
     private array $tableauErreur = array();
 
-    function __construct()
+    function __construct(string $action)
     {
         global $chemin, $lesVues;
 
         try {
-            $action = $_REQUEST['action'];
-            if ($action != NULL) {
-                $action = Validation::val_action($action);
-            }
-
             switch ($action) {
 
-                case NULL:
-                    $this->accueil(); //appeler page d'accueil
+                case "ALL_PRIV" :
+                    $this->voirListesPriv($_SESSION['id']);
                     break;
 
-                case "VOIR_LISTE" : //visualiser une liste avec ses tâches
-                    $this->voirListe($_REQUEST['idliste']);
+                case "NEW_PRIV" :
+                    $this->ajouterListePriv($_SESSION['id']);
                     break;
 
-
-                case "ADD_LISTE_PUB": //ajouter une liste publique
-                    $this->ajouterListePub();
+                case "DECONNEXION" :
+                    $this->deconnexion();
                     break;
-
-                case "SUP_LISTE": //supprimer une liste
-                    $this->supprimerListe($_REQUEST['idliste']);
-                    break;
-
-                case "CHECK_TACHE": //changer l'état 'effectuée' d'une tâche
-
-                case "ADD_TACHE": //ajouter une tâche
-
-                case "SUP_TACHE": //supprimer une tâche
-                    $this->supprimerTache($_REQUEST['idTache'], $_REQUEST['idliste']);
-                    break;
-
-                case "FORM_CO": //accéder au formulaire de connexion
-
-                case "CONNEXION": //valider le formulaire de connexion
 
                 default:
                     $this->tableauErreur[] = "Mauvais appel php";
@@ -61,5 +39,52 @@ class ControleUtilisateur extends ControleVisiteur
             require($chemin . $lesVues['erreur']);
         }
         exit(0);
+    }
+
+    function voirListesPriv(int $id)
+    {
+        global $chemin, $lesVues;
+
+        $tabListes=array();
+        $id = Validation::val_int($id, $this->tableauErreur);
+
+        if (!empty($this->tableauErreur)) {
+            require($chemin . $lesVues['erreur']);
+        }
+        else
+        {
+            $m = new ModeleDonnees();
+            $tabListes=$m->getListesPrivees($id);
+
+            require($chemin . $lesVues['privee']);
+        }
+    }
+
+    function ajouterListePriv(int $id)
+    {
+        global $chemin, $lesVues;
+
+        // On récupère le titre dans le formulaire ou on l'initie à "" si rien n'a été rentré
+        $titre = isset($_POST['titre']) ? $_POST['titre'] : "";
+
+        Validation::val_titre($titre, $this->tableauErreur); //On valide le titre
+        $id = Validation::val_int($id, $this->tableauErreur);
+
+        if (!empty($this->tableauErreur)) {
+            require($chemin . $lesVues['erreur']);
+        } else {
+            $m = new ModeleDonnees();
+            $m->addPrivee($titre, $id);
+
+            $this->voirListesPriv($id);
+        }
+    }
+
+    function deconnexion()
+    {
+        unset($_SESSION['login']);
+        unset($_SESSION['id']);
+
+        $this->accueil();
     }
 }

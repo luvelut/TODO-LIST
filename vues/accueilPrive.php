@@ -22,7 +22,7 @@
 <br>
 
 
-<!-- SWITCH LISTE PRIVEES -->
+<!-- SWITCH LISTES PUBLIQUES -->
 
 <div id="privee">
     <a id=priv href="#">
@@ -53,7 +53,25 @@
     }?>
 </div>
 
-<!-- HIDDEN -->
+<!-- LES PAGES -->
+<div id="pagination">
+    <?php
+    if ($nbPages > 1)
+    {
+        if ($page > 1)
+        {
+            echo '<a href="?action=ALL_PRIV&page=' . ($page-1) . '">page précédente <<< </a>';
+        }
+        echo '<a href="?action=ALL_PRIV&page=' . $page . '">  ' . $page . '  </a>';
+        if ($page<$nbPages)
+        {
+            echo '<a href="?action=ALL_PRIV&page=' . ($page+1) . '"> >>> page suivante</a>';
+        }
+    }
+    ?>
+</div>
+
+<!-- AJOUT LISTE PRIVEE -->
 <br>
 <br>
 

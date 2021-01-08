@@ -10,44 +10,17 @@ class Validation
 
     }
 
+    //Validation d'un entier (id, page, etc.)
     static function val_int(int $i, array &$tableauErreur) : int
     {
         if(isset($i)) {
-            return filter_var($i, FILTER_SANITIZE_NUMBER_INT);
+            return abs(filter_var($i, FILTER_SANITIZE_NUMBER_INT));
         }
         else {
             $tableauErreur[] = "Mauvais passage de paramètre";
             return 0;
         }
     }
-
-    //Validation de la connexion de l'utilisateur
-    /*
-    static function val_connexion(string &$nom, string &$mdp, array &$dataVueErreur) {
-
-        if (!isset($nom)||$nom=="") {
-            $dataVueErreur[] =	"pas de nom";
-            $nom="";
-        }
-
-        if ($nom != filter_var($nom, FILTER_SANITIZE_STRING))
-        {
-            $dataVueErreur[] =	"tentative d'injection de code (attaque sécurité)";
-            $nom="";
-
-        }
-
-        if (!isset($mdp)||$mdp=="") {
-            $dataVueErreur[] =	"pas de mot de passe ";
-            $mdp="";
-        }
-
-        if($mdp != filter_var($mdp, FILTER_SANITIZE_STRING)) {
-            $dataVueErreur[] =	"tentative d'injection de code (attaque sécurité)";
-            $mdp="";
-        }
-
-    }*/
 
     //Validation du login
     static function val_login(string $login, array &$tableauErreur) {
@@ -62,7 +35,7 @@ class Validation
         }
     }
 
-    //Validation du login
+    //Validation du mot de passe
     static function val_mdp(string $mdp, array &$tableauErreur) {
         if ($mdp != filter_var($mdp, FILTER_SANITIZE_STRING))
         {
@@ -82,7 +55,7 @@ class Validation
             $tableauErreur[] =	"pas d'intitulé";
         }
 
-        if ($intitule != filter_var($intitule, FILTER_SANITIZE_STRING))
+        if ($intitule != filter_var($intitule, FILTER_SANITIZE_STRING,FILTER_FLAG_NO_ENCODE_QUOTES))
         {
             $tableauErreur[] =	"tentative d'injection de code (attaque sécurité)";
             $intitule="";
@@ -97,7 +70,7 @@ class Validation
             $tableauErreur[] =	"pas de titre";
         }
 
-        if ($titre != filter_var($titre, FILTER_SANITIZE_STRING))
+        if ($titre != filter_var($titre, FILTER_SANITIZE_STRING,FILTER_FLAG_NO_ENCODE_QUOTES))
         {
             $tableauErreur[] =	"tentative d'injection de code (attaque sécurité)";
             $titre="";

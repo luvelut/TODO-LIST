@@ -21,7 +21,7 @@
 		</nav>
 		<br>
 
-<!--MENU CONNEXION-->
+<!--MENU INSCRIPTION-->
 
 		<div id="co">
 			<p><strong>S'inscrire</strong></p>

@@ -21,14 +21,6 @@ class Tache
     }
 
     /**
-     * @return string
-     */
-    public function getIntitule(): string
-    {
-        return $this->intitule;
-    }
-
-    /**
      * @return bool
      */
     public function isEffectuee(): bool
@@ -36,22 +28,13 @@ class Tache
         return $this->effectuee;
     }
 
-    /**
-     * @param bool $effectuee
-     */
-    public function setEffectuee(bool $effectuee): void
+    public function getIntitule(): string
     {
-        $this->effectuee = $effectuee;
+        return $this->intitule;
     }
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;
     }
-
-
-
 }

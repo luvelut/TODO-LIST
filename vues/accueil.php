@@ -31,15 +31,13 @@
 		<br>
 
 
-<!-- SWITCH LISTE PRIVEES
-<img src="vues/photos/lock.jpg" id="imgprivee" width="40" height="40">
--->
+<!-- SWITCH LISTES PRIVEES -->
 
 	<div id="privee">
 		<a id=priv href="#">
             <?php
                 if (isset($_SESSION['login'])) {
-                    echo '<button onclick="location.href=' . "'" . 'index.php?action=ALL_PRIV' . "'". '">
+                    echo '<button class="btn btn-dark" onclick="location.href=' . "'" . 'index.php?action=ALL_PRIV' . "'". '">
                     Voir les listes privées
                     </button>';
                 }
@@ -67,8 +65,28 @@
 				echo '<p>Aucune liste à afficher</p>';
 			}?>
 		</div>
+        <br>
+
+<!-- LES PAGES -->
+
+        <div id="pagination">
+            <?php
+                if ($nbPages > 1)
+                {
+                    if ($page > 1)
+                    {
+                        echo '<a href="?page=' . ($page-1) . '"> <strong >page précédente <<< </strong> </a>';
+                    }
+                    echo '<a href="?page=' . $page . '"> <strong>' . $page . '</strong>   </a>';
+                    if ($page<$nbPages)
+                    {
+                        echo '<a href="?page=' . ($page+1) . '"> <strong> >>> page suivante </strong> </a>';
+                    }
+                }
+            ?>
+        </div>
 		
-<!-- HIDDEN -->
+<!-- AJOUT DE LISTE -->
 		<br>
 		<br>
 		

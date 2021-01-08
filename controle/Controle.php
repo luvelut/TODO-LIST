@@ -3,11 +3,25 @@
 
 abstract class Controle
 {
+    protected array $tableauErreur = array();
+
+    //permet d'afficher la page d'accueil avec les listes publiques
     public function accueil() {
         global $chemin, $lesVues;
 
         $m = new ModeleDonnees();
-        $tabPub = $m->getListesPubliques();
-        require($chemin . $lesVues['accueil']);
+
+        $nbPages = $m->getNbPagesPub();
+
+        $page = (isset($_GET['page'])) ? Validation::val_int($_GET['page'], $this->tableauErreur) : 1;
+        $page = 0 ? 1 : $page; //si la page est à zéro, on la met à 1, sinon on la laisse
+
+        if (!empty($this->tableauErreur)) {
+            require($chemin . $lesVues['erreur']);
+        }
+        else {
+            $tabPub = $m->getListesPubliques($page);
+            require($chemin . $lesVues['accueil']);
+        }
     }
 }

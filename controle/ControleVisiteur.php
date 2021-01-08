@@ -3,7 +3,6 @@
 
 class ControleVisiteur extends Controle
 {
-    private array $tableauErreur = array();
 
     function __construct(?string $action)
     {
@@ -48,11 +47,11 @@ class ControleVisiteur extends Controle
                     $this->connexion();
                     break;
 
-                case "FORM_INS":
+                case "FORM_INS": //afficher le formulaire d'inscription
                     $this->affichageInscription();
                     break;
 
-                case "INSCRIPTION":
+                case "INSCRIPTION": //création d'un nouvel utilisateur
                     $this->inscription();
                     break;
 

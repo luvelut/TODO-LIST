@@ -15,6 +15,7 @@ class GatewayUtilisateur
         $this->co=new Connexion($dsn,$user,$mdp);
     }
 
+    //permet de vérifier si un utilisateur (login+mdp) existe (pour valider la connexion)
     public function existe(string $login, string $mdp) : bool
     {
         $query='SELECT * FROM utilisateur WHERE nom=:login';
@@ -28,6 +29,7 @@ class GatewayUtilisateur
         }
     }
 
+    //permet de vérifier si un login existe déjà ou non (appelée lors d'une nouvelle inscription)
     public function existeLogin(string $login) : bool
     {
         $query='SELECT * FROM utilisateur WHERE nom=:login';
@@ -37,6 +39,7 @@ class GatewayUtilisateur
         else return false;
     }
 
+    //renvoie l'id d'un utilisateur à partir de son login
     public function getId(string $login) : ?int
     {
         $query='SELECT idutilisateur FROM utilisateur WHERE nom=:login';
@@ -50,6 +53,7 @@ class GatewayUtilisateur
         }
     }
 
+    //crée un nouvel utilisateur dans la base de données
     public function ajoutUtilisateur(string $login, string $mdp)
     {
         $query='INSERT INTO utilisateur VALUES(:idutilisateur,:nom,:mdp)';

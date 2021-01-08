@@ -15,6 +15,7 @@ class GatewayTache
         $this->co=new Connexion($dsn,$user,$mdp);
     }
 
+    //permet de sélectionner toutes les tâches d'une liste via l'id de la liste
     public function selectTache(int $id) : array
     {
         $tabTache=array();
@@ -33,15 +34,7 @@ class GatewayTache
         return $tabTache;
     }
 
-    /*
-    public function nbTaches() : int
-    {
-        $query='SELECT COUNT(*) FROM tache';
-        $this->co->executeQuery($query,array());
-        $resultats=$this->co->getResultats();
-        return $resultats[0]['COUNT(*)'];
-    }*/
-
+    //permet de sélectionner une tâche à partir de l'id de la tâche
     public function getById(int $id) : Tache
     {
         $tabTache=array();
@@ -60,6 +53,7 @@ class GatewayTache
         return $tabTache[0];
     }
 
+    //crée une nouvelle tâche dans la base de données
     public function ajouterTache(string $intitule, int $idliste) : void
     {
         $query="INSERT INTO tache VALUES(:idtache,:intitule,:bool,:idliste)";
@@ -69,18 +63,21 @@ class GatewayTache
             ':idliste' => array($idliste,PDO::PARAM_INT)));
     }
 
+    //modifie la base de données pour que la tâche soit marquée comme effectuée
     public function cocherTache(int $id) : void
     {
         $query="UPDATE tache SET effectuee='VRAI' WHERE idtache=:id";
         $this->co->executeQuery($query,array(':id' => array($id,PDO::PARAM_INT)));
     }
 
+    //modifie la base de données pour que la tâche soit marquée comme non effectuée
     public function decocherTache(int $id) : void
     {
         $query="UPDATE tache SET effectuee='FAUX' WHERE idtache=:id";
         $this->co->executeQuery($query,array(':id' => array($id,PDO::PARAM_INT)));
     }
 
+    //supprime une tâche de la base de données
     public function supprimerTache(int $id) : void
     {
         $query="DELETE FROM tache WHERE idtache=:id";

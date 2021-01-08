@@ -13,6 +13,7 @@
 
 	<body>
 
+<!--AFFICHAGE DE LA LISTE-->
 		<h1><?= $titre ?></h1>
 
 		<br>
@@ -57,6 +58,8 @@
 		</div>
 		<br>
 		<br>
+
+<!--LES TACHES-->
 
 		<div id="taches">
 			<?php

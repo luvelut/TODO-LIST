@@ -10,6 +10,7 @@ class ModeleUtilisateur
         $this->gw = new GatewayUtilisateur();
     }
 
+    //permet de vérifier si un utilisateur est déjà connecté
     public function isUser() : ?Utilisateur
     {
         $tableauErreur = array();
@@ -30,6 +31,7 @@ class ModeleUtilisateur
         return null;
     }
 
+    //permet à un utilisateur de se connecter (en rentrant login et mdp)
     public function connexion(string $login, string $mdp) : ?Utilisateur
     {
         $gw = new GatewayUtilisateur();
@@ -44,6 +46,7 @@ class ModeleUtilisateur
         }
     }
 
+    //création d'un nouvel utilisateur
     public function inscription(string $login, string $mdp) : bool
     {
         $gw = new GatewayUtilisateur();
@@ -56,6 +59,5 @@ class ModeleUtilisateur
         }
         else return false;
     }
-    //fonction ajouter un user -> inscription
 
 }

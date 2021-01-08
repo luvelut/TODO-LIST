@@ -3,7 +3,6 @@
 
 class ControleUtilisateur extends Controle
 {
-    private array $tableauErreur = array();
 
     function __construct(string $action)
     {
@@ -12,15 +11,15 @@ class ControleUtilisateur extends Controle
         try {
             switch ($action) {
 
-                case "ALL_PRIV" :
+                case "ALL_PRIV" : //affichage des listes privées
                     $this->voirListesPriv($_SESSION['id']);
                     break;
 
-                case "NEW_PRIV" :
+                case "NEW_PRIV" : //ajout d'une nouvelle liste privée
                     $this->ajouterListePriv($_SESSION['id']);
                     break;
 
-                case "DECONNEXION" :
+                case "DECONNEXION" : //déconnexion
                     $this->deconnexion();
                     break;
 
@@ -48,13 +47,19 @@ class ControleUtilisateur extends Controle
         $tabListes=array();
         $id = Validation::val_int($id, $this->tableauErreur);
 
+        $m = new ModeleDonnees();
+
+        $nbPages = $m->getNbPagesPriv($id);
+
+        $page = (isset($_GET['page'])) ? Validation::val_int($_GET['page'], $this->tableauErreur) : 1;
+        $page = 0 ? 1 : $page; //si la page est à zéro, on la met à 1, sinon on la laisse
+
         if (!empty($this->tableauErreur)) {
             require($chemin . $lesVues['erreur']);
         }
         else
         {
-            $m = new ModeleDonnees();
-            $tabListes=$m->getListesPrivees($id);
+            $tabListes=$m->getListesPrivees($id,$page);
 
             require($chemin . $lesVues['privee']);
         }
@@ -85,6 +90,6 @@ class ControleUtilisateur extends Controle
         unset($_SESSION['login']);
         unset($_SESSION['id']);
 
-        $this->accueil();
+        $this->accueil(); //appel de la fonction de la classe mère Contrôle
     }
 }

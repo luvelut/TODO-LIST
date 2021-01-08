@@ -1,7 +1,7 @@
 # TODO-LIST
 Site de to-do list (2020) 
 
-__projet en cours de réalisation__
+__projet terminé__
 
 ## PRESENTATION
 
